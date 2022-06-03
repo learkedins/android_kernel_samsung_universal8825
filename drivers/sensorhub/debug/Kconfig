@@ -3,3 +3,4 @@ config SHUB_DEBUG
 	default n
 	help
 	  If you want to use debug mode for sensor hub, it should be set.
+
