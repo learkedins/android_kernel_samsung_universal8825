@@ -18,6 +18,11 @@ $(if $(filter __%, $(MAKECMDGOALS)), \
 PHONY := __all
 __all:
 
+CROSS_COMPILE=../clang-r416183b/bin/aarch64-linux-gnu
+CC=../clang-r416183b/bin/clang
+CLANG_TRIPLE=../clang-r416183b/bin/aarch64-linux-gnu
+
+
 # We are using a recursive build, so we need to do a little thinking
 # to get the ordering right.
 #
