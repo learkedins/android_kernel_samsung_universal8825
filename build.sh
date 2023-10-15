@@ -2,7 +2,7 @@
 DIR=`readlink -f .`
 PARENT_DIR=`readlink -f ..`
 
-KERNEL_MAKE_ENV="LOCALVERSION=-fgnor"
+KERNEL_MAKE_ENV="LOCALVERSION=-clark"
 
 export PLATFORM_VERSION=12
 export ANDROID_MAJOR_VERSION=s
@@ -54,7 +54,7 @@ anykernel3() {
     cd $PARENT_DIR/AnyKernel3
     git reset --hard
     cp $DIR/arch/arm64/boot/Image zImage
-    sed -i "s/ExampleKernel by osm0sis/a53x kernel by fgnor/g" anykernel.sh
+    sed -i "s/ExampleKernel by osm0sis/a53x kernel by clark/g" anykernel.sh
     sed -i "s/=maguro/=a53x/g" anykernel.sh
     sed -i "s/=toroplus/=/g" anykernel.sh
     sed -i "s/=toro/=/g" anykernel.sh
@@ -76,12 +76,12 @@ anykernel3() {
 
 compile() {
   single() {
-    make $KERNEL_MAKE_ENV fgnor-a53x_defconfig
+    make $KERNEL_MAKE_ENV clark-a53xxx_defconfig
     make $KERNEL_MAKE_ENV
   }
 
   multi() {
-    make -j$(nproc) $KERNEL_MAKE_ENV fgnor-a53x_defconfig
+    make -j$(nproc) $KERNEL_MAKE_ENV clark-a53xxx_defconfig
     make -j$(nproc) $KERNEL_MAKE_ENV
   }
 
