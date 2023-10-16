@@ -1329,6 +1329,77 @@ init_fail:
 	return 0;
 }
 
+unsigned int boot_freqs = {1898000, 2496000};
+
+/* underclocking little cores */
+static unsigned long arg_cpu_min_c1 = 533000;
+static int __init cpufreq_read_cpu_min_c1(char *cpu_min_c1)
+{
+    unsigned long ui_khz;
+    int ret;
+
+    ret = kstrtoul(cpu_min_c1, 0, &ui_khz);
+    if (ret)
+        return -EINVAL;
+
+    arg_cpu_min_c1 = ui_khz;
+    printk("cpu_min_c1=%lu\n", arg_cpu_min_c1);
+    return ret;
+    
+}
+__setup("cpu_min_c1=", cpufreq_read_cpu_min_c1);
+
+
+unsigned long arg_cpu_min_c2 = 533000; 
+static __init int cpufreq_read_cpu_min_c2(char *cpu_min_c2)
+{
+	unsigned long ui_khz;
+	int ret;
+
+	ret = kstrtoul(cpu_min_c2, 0, &ui_khz);
+	if (ret)
+		return -EINVAL;
+
+	arg_cpu_min_c2 = ui_khz;
+	printk("cpu_min_c2=%lu\n", arg_cpu_min_c2);
+	return ret;
+}
+__setup("cpu_min_c2=", cpufreq_read_cpu_min_c2);
+
+/* Overclock little cpus */
+static unsigned long arg_cpu_max_c1 = 2002000; 
+static int __init cpufreq_read_cpu_max_c1(char *cpu_max_c1) 
+{
+	unsigned long ui_khz;
+	int ret;
+
+	ret = kstrtoul(cpu_max_c1, 0, &ui_khz);
+	if (ret)
+		return -EINVAL;
+
+	arg_cpu_max_c1 = ui_khz;
+	printk("cpu_max_c1=%lu\n", arg_cpu_max_c1); 
+	return ret;
+}
+__setup("cpu_max_c1=", cpufreq_read_cpu_max_c1);
+
+/*Overclocking big cores to 2.6GHz*/
+unsigned long arg_cpu_max_c2 = 2600000;
+static __init int cpufreq_read_cpu_max_c2(char *cpu_max_c2)
+{
+	unsigned long ui_khz;
+	int ret;
+
+	ret = kstrtoul(cpu_max_c2, 0, &ui_khz);
+	if (ret)
+		return -EINVAL;
+
+	arg_cpu_max_c2 = ui_khz;
+	printk("cpu_max_c2=%lu\n", arg_cpu_max_c2);
+	return ret;
+}
+__setup("cpu_max_c2=", cpufreq_read_cpu_max_c2);
+
 #if IS_ENABLED(CONFIG_SEC_BOOTSTAT)
 void sec_bootstat_get_cpuinfo(int *freq, int *online)
 {
@@ -1729,6 +1800,7 @@ static int init_domain(struct exynos_cpufreq_domain *domain,
 		domain->dss_type = domain->id;
 	}
 
+#if 0
 	/*
 	 * Set min/max frequency.
 	 * If max-freq property exists in device tree, max frequency is
@@ -1743,6 +1815,18 @@ static int init_domain(struct exynos_cpufreq_domain *domain,
 		domain->max_freq = min(domain->max_freq, val);
 	if (!of_property_read_u32(dn, "min-freq", &val))
 		domain->min_freq = max(domain->min_freq, val);
+#endif
+
+    if (domain->id == 0) {
+        domain->max_freq = arg_cpu_max_c1;
+        domain->min_freq = arg_cpu_min_c1;
+        domain->boot_freq = boot_freq[0];
+    } else if(domain->id == 0) {
+        domain->max_freq = arg_cpu_max_c2;
+        domain->min_freq = arg_cpu_min_c2;
+        domain->boot_freq = boot_freq[1];
+    }
+    
 
 	/* Get freq-table from device tree and cut the out of range */
 	raw_table_size = of_property_count_u32_elems(dn, "freq-table");
