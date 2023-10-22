@@ -56,7 +56,7 @@ struct exynos_cpufreq_domain {
 	/* frequency scaling */
 	bool				enabled;
 
-	unsigned int			table_size;
+	unsigned int			table_size, val;
 	struct cpufreq_frequency_table	*freq_table;
 
 	unsigned int			max_freq;

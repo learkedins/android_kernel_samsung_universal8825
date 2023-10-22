@@ -56,7 +56,7 @@ anykernel3() {
     cp $DIR/arch/arm64/boot/Image zImage
     sed -i "s/ExampleKernel by osm0sis/a53x kernel by clark/g" anykernel.sh
     sed -i "s/=maguro/=a53x/g" anykernel.sh
-    sed -i "s/=toroplus/=/g" anykernel.sh
+    sed -i "s/=toroplus/=a33x/g" anykernel.sh
     sed -i "s/=toro/=/g" anykernel.sh
     sed -i "s/=tuna/=/g" anykernel.sh
     sed -i "s/platform\/omap\/omap_hsmmc\.0\/by-name\/boot/bootdevice\/by-name\/boot/g" anykernel.sh
